@@ -20,6 +20,7 @@
   "homepage": "https://github.com/mxryan/issue-tracker#readme",
   "dependencies": {
     "express": "^4.16.4",
+    "helmet": "^3.15.0",
     "mongoose": "^5.4.0"
   }
 }
