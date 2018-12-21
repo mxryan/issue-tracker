@@ -20,6 +20,10 @@ const IssueSchema = new mongoose.Schema({
   },
   statusText: {
     type: String
+  },
+  open: {
+    type: Boolean,
+    default: true
   }
 });
 IssueSchema.plugin(timestamps);

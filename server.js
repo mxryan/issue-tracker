@@ -1,3 +1,6 @@
+// note: run toLower on all project names?
+// note: use dirname with set static?
+const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
 const mongoose = require("mongoose");
@@ -6,6 +9,7 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 app.use(helmet());
+app.use(express.urlencoded({extended: false}));
 app.use(express.static("public"));
 
 if (process.env.MONGODB_URI) {
@@ -22,15 +26,62 @@ app.get("/", (req, res) => {
   res.sendfile("public/index.html");
 });
 
+app.post("/api/project", (req, res) => {
+  db.Project.findOne({ projectName: req.body.projectName }, (findErr, foundProj) => {
+    if (findErr) {
+      res.status(500).send({ error: findErr });
+      return console.log(findErr);
+    }
+    if (foundProj) {
+      res.status(409).send({ message: "Project already exists" });
+    } else {
+      const proj = new db.Project({
+        projectName: req.body.projectName
+      });
+      proj.save((saveErr, savedProject) => {
+        if (saveErr) {
+          res.status(500).send({error: saveErr});
+          return console.log(saveErr);
+        } 
+        res.status(201).send({ data: savedProject });
+      });
+    }
+  })
+});
+
 // I can POST /api/issues/{projectname} with form data containing required issue_title, issue_text, created_by, and optional assigned_to and status_text.
 // The object saved (and returned) will include all of those fields (blank for optional no input) and also include created_on(date/time), updated_on(date/time), open(boolean, true for open, false for closed), and _id.
 app.post("/api/issues/:projectname", (req, res) => {
-  // INCOMING FORM DATA:
-  // REQUIRED: issue_title, issue_text, created_by
-  // OPTIONAL: assigned_to, status_text
-  // RETURNED OBJECT: all fields above +
-  // DATE created_on, DATE updated_on, BOOL open, OBJECT ID _id
-  
+  console.log("hit /api/issues with param name: " + req.params.projectname)
+  db.Project.findOne({ projectName: req.params.projectname }, (findErr, foundProj) => {
+    if (findErr) {
+      res.status(500).send({ error: findErr });
+      return console.log(findErr);
+    }
+    if (foundProj) {
+      // INCOMING FORM DATA:
+      // REQUIRED: issue_title, issue_text, created_by
+      // OPTIONAL: assigned_to, status_text
+      // RETURNED OBJECT: all fields above +
+      // DATE created_on, DATE updated_on, BOOL open, OBJECT ID _id
+      const issue = new db.Issue({
+        issueTitle: req.body.issueTitle,
+        issueText: req.body.issueText,
+        createdBy: req.body.createdBy,
+        assignedTo: req.body.assignedTo ? req.body.assignedTo : "",
+        statusText: req.body.statusText ? req.body.statusText : ""
+      });
+      issue.save((saveErr, savedIssue) => {
+        if (saveErr) {
+          res.status(500).send({error: saveErr});
+          return console.log(saveErr);
+        } 
+        res.status(201).send({ data: savedIssue });
+      })
+    } else {
+      res.status(409).send({ message: "Project doesn't exist." });
+    }
+  });
 });
 
 
@@ -49,6 +100,11 @@ app.delete("/api/issues/:projectname", (req, res) => {
 app.get("/api/issues/:projectname", (req, res) => {
   // stuff
 });
+
+app.get("/:projectname", (req, res) => {
+  console.log("hit project view route");
+  res.sendFile(path.join(__dirname, "public/project.html"));
+})
 
 
 app.listen(PORT, () => console.log("Server on."));
