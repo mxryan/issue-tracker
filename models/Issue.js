@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const timestamps = require("mongoose-timestamp");
+
 const IssueSchema = new mongoose.Schema({
   issueTitle: {
     type: String,
@@ -20,8 +21,8 @@ const IssueSchema = new mongoose.Schema({
   statusText: {
     type: String
   }
-})
-
+});
 IssueSchema.plugin(timestamps);
+
 const Issue = mongoose.model("Issue", IssueSchema);
 module.exports = Issue
