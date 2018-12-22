@@ -5,7 +5,6 @@
 // - break out helper functions
 // - break out routes
 // - break out controllers
-// - finish put route
 // - delete route
 // - read route
 // - need to associate issues with projets
@@ -73,11 +72,17 @@ app.post("/api/project", (req, res) => {
 // The object saved (and returned) will include all of those fields (blank for optional no input) and also include created_on(date/time), updated_on(date/time), open(boolean, true for open, false for closed), and _id.
 app.post("/api/issues/:projectname", (req, res) => {
   console.log("hit /api/issues with param name: " + req.params.projectname)
+  // REFACTOR: validate the incoming form data then instantiate new issue object
+  // then push that issues object id onto project with db.Project.findOneAndUpdate
+  // if found: save the issue object
+  // if not found: send appropriate info back to client
+
   db.Project.findOne({ projectName: req.params.projectname }, (findErr, foundProj) => {
     if (findErr) {
       res.status(500).send({ error: findErr });
       return console.log(findErr);
     }
+  
     if (foundProj) {
       const issue = new db.Issue({
         issueTitle: req.body.issueTitle,
@@ -90,9 +95,18 @@ app.post("/api/issues/:projectname", (req, res) => {
         if (saveErr) {
           res.status(500).send({error: saveErr});
           return console.log(saveErr);
-        } 
-        res.status(201).send({ data: savedIssue });
-      })
+        }
+        db.Project.findByIdAndUpdate(foundProj._id, {$push:{issues: issue._id}}, {new:true},(findErr, updatedProj) => {
+          if (findErr) {
+            res.status(500).send({error: findErr});
+            return console.log(findErr);
+          }
+          res.status(201).send({ issueData: savedIssue, projectData: updatedProj });
+
+        }) 
+        
+      });
+      
     } else {
       res.status(409).send({ message: "Project doesn't exist." });
     }
