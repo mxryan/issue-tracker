@@ -1,5 +1,16 @@
 // note: run toLower on all project names?
-// note: use dirname with set static?
+// note: switch html files to a views folder
+// note: review helmet js lessons
+// todo:
+// - break out helper functions
+// - break out routes
+// - break out controllers
+// - finish put route
+// - delete route
+// - read route
+// - need to associate issues with projets
+// - update front end to enable issues to be submitted and viewed for any project
+// - update front end to include new project submit
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
@@ -7,6 +18,15 @@ const mongoose = require("mongoose");
 const db = require("./models");
 const PORT = process.env.PORT || 5000;
 const app = express();
+
+// helper function
+function isEmpty(obj) {
+  for(let key in obj) {
+      if(obj.hasOwnProperty(key))
+          return false;
+  }
+  return true;
+}
 
 app.use(helmet());
 app.use(express.urlencoded({extended: false}));
@@ -59,11 +79,6 @@ app.post("/api/issues/:projectname", (req, res) => {
       return console.log(findErr);
     }
     if (foundProj) {
-      // INCOMING FORM DATA:
-      // REQUIRED: issue_title, issue_text, created_by
-      // OPTIONAL: assigned_to, status_text
-      // RETURNED OBJECT: all fields above +
-      // DATE created_on, DATE updated_on, BOOL open, OBJECT ID _id
       const issue = new db.Issue({
         issueTitle: req.body.issueTitle,
         issueText: req.body.issueText,
@@ -86,8 +101,30 @@ app.post("/api/issues/:projectname", (req, res) => {
 
 
 // I can PUT /api/issues/{projectname} with a _id and any fields in the object with a value to object said object. Returned will be 'successfully updated' or 'could not update '+_id. This should always update updated_on. If no fields are sent return 'no updated field sent'.
+
 app.put("/api/issues/:projectname", (req, res) => {
-  // stuff
+  // check that there are update fields
+  const updateObj = {};
+  for (let key in req.body) {
+    if (key != "_id" && req.body[key]) {
+      updateObj[key] = req.body[key];
+    }
+  }
+  if (isEmpty(updateObj)) {
+    res.status(404).send({message: "At least one field in addition to _id must be filled in"});
+  } else {
+    db.Issue.findByIdAndUpdate(req.body._id, updateObj, {new: true}, (updateErr, updatedIssue) => {
+      if (updateErr) {
+        res.status(500).send({error: updateErr});
+        return console.log(updateErr);
+      }
+      if (updatedIssue) {
+        res.status(201).send({data: updatedIssue});
+      } else {
+        res.status(404).send({message: "Unable to find project with that id"});
+      }
+    });
+  }
 });
 
 // I can DELETE /api/issues/{projectname} with a _id to completely delete an issue. If no _id is sent return '_id error', success: 'deleted '+_id, failed: 'could not delete '+_id.
