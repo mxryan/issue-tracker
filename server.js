@@ -5,7 +5,6 @@
 // - break out helper functions
 // - break out routes
 // - break out controllers
-// - delete route
 // - read route
 // - need to associate issues with projets
 // - update front end to enable issues to be submitted and viewed for any project
@@ -28,7 +27,7 @@ function isEmpty(obj) {
 }
 
 app.use(helmet());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
 if (process.env.MONGODB_URI) {
@@ -59,7 +58,7 @@ app.post("/api/project", (req, res) => {
       });
       proj.save((saveErr, savedProject) => {
         if (saveErr) {
-          res.status(500).send({error: saveErr});
+          res.status(500).send({ error: saveErr });
           return console.log(saveErr);
         } 
         res.status(201).send({ data: savedProject });
@@ -73,7 +72,7 @@ app.post("/api/project", (req, res) => {
 app.post("/api/issues/:projectname", (req, res) => {
   console.log("hit /api/issues with param name: " + req.params.projectname)
   // REFACTOR: validate the incoming form data then instantiate new issue object
-  // then push that issues object id onto project with db.Project.findOneAndUpdate
+  // then push that issue's _id onto project with db.Project.findOneAndUpdate
   // if found: save the issue object
   // if not found: send appropriate info back to client
 
@@ -96,15 +95,13 @@ app.post("/api/issues/:projectname", (req, res) => {
           res.status(500).send({error: saveErr});
           return console.log(saveErr);
         }
-        db.Project.findByIdAndUpdate(foundProj._id, {$push:{issues: issue._id}}, {new:true},(findErr, updatedProj) => {
+        db.Project.findByIdAndUpdate(foundProj._id, { $push: {issues: issue._id} }, { new: true },(findErr, updatedProj) => {
           if (findErr) {
             res.status(500).send({error: findErr});
             return console.log(findErr);
           }
           res.status(201).send({ issueData: savedIssue, projectData: updatedProj });
-
-        }) 
-        
+        }); 
       });
       
     } else {
@@ -127,15 +124,15 @@ app.put("/api/issues/:projectname", (req, res) => {
   if (isEmpty(updateObj)) {
     res.status(404).send({message: "At least one field in addition to _id must be filled in"});
   } else {
-    db.Issue.findByIdAndUpdate(req.body._id, updateObj, {new: true}, (updateErr, updatedIssue) => {
+    db.Issue.findByIdAndUpdate(req.body._id, updateObj, { new: true }, (updateErr, updatedIssue) => {
       if (updateErr) {
-        res.status(500).send({error: updateErr});
+        res.status(500).send({ error: updateErr });
         return console.log(updateErr);
       }
       if (updatedIssue) {
-        res.status(201).send({data: updatedIssue});
+        res.status(201).send({ data: updatedIssue });
       } else {
-        res.status(404).send({message: "Unable to find project with that id"});
+        res.status(404).send({ message: "Unable to find project with that id" });
       }
     });
   }
@@ -143,7 +140,19 @@ app.put("/api/issues/:projectname", (req, res) => {
 
 // I can DELETE /api/issues/{projectname} with a _id to completely delete an issue. If no _id is sent return '_id error', success: 'deleted '+_id, failed: 'could not delete '+_id.
 app.delete("/api/issues/:projectname", (req, res) => {
-  // stuff
+  db.Issue.findByIdAndDelete(req.body._id, (findErr, deletedIssue) => {
+    if (findErr) {
+      res.status(500).send({ error: findErr });
+      return console.log({ error: findErr });
+    }
+    if (deletedIssue) {
+      res.status(201).send({ message: "Deleted " + deletedIssue._id, data: deletedIssue });
+      console.log(deletedIssue);
+    } else {
+      res.status(404).send({ message: "_id error. Are you sure " + req.body._id + " is a valid _id?" });
+      console.log("Delete failed.");
+    }
+  });
 });
 
 // I can GET /api/issues/{projectname} for an array of all issues on that specific project with all the information for each issue as was returned when posted.
