@@ -6,7 +6,7 @@ const ProjectSchema = new mongoose.Schema({
     trim: true,
     required: "Project Name is Required"
   },
-  issues: [mongoose.Schema.Types.ObjectId]
+  issues: [{type: mongoose.Schema.Types.ObjectId, ref: "Issue"}]
 });
 ProjectSchema.plugin(timestamps);
 

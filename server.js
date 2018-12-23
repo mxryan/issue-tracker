@@ -2,6 +2,7 @@
 // note: switch html files to a views folder
 // note: review helmet js lessons
 // todo:
+// - change param from projectname to projectName
 // - break out helper functions
 // - break out routes
 // - break out controllers
@@ -158,7 +159,17 @@ app.delete("/api/issues/:projectname", (req, res) => {
 // I can GET /api/issues/{projectname} for an array of all issues on that specific project with all the information for each issue as was returned when posted.
 // I can filter my get request by also passing along any field and value in the query(ie. /api/issues/{project}?open=false). I can pass along as many fields/values as I want.
 app.get("/api/issues/:projectname", (req, res) => {
-  // stuff
+  db.Project.findOne({projectName: req.params.projectname}).populate("issues").exec((findErr, foundProj) => {
+    if (findErr) {
+      res.status(500).send({ error: findErr });
+      return console.log({ error: findErr });
+    }
+    if (foundProj) {
+      res.status(201).send({ data: foundProj });
+    } else {
+      res.status(404).send({ message: "Could not find project" });
+    }
+  })
 });
 
 app.get("/:projectname", (req, res) => {
