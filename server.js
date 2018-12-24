@@ -66,8 +66,6 @@ app.post("/api/project", (req, res) => {
   })
 });
 
-// I can POST /api/issues/{projectname} with form data containing required issue_title, issue_text, created_by, and optional assigned_to and status_text.
-// The object saved (and returned) will include all of those fields (blank for optional no input) and also include created_on(date/time), updated_on(date/time), open(boolean, true for open, false for closed), and _id.
 app.post("/api/issues/:projectname", (req, res) => {
   console.log("hit /api/issues with param name: " + req.params.projectname)
   // REFACTOR: validate the incoming form data then instantiate new issue object
