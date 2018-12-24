@@ -27,7 +27,7 @@ function isEmpty(obj) {
 
 app.use(helmet());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "client/build")));
 
 if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI, {
@@ -39,8 +39,8 @@ if (process.env.MONGODB_URI) {
   });
 }
 
-app.get("/", (req, res) => {
-  res.sendfile("public/index.html");
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname + "/client/build/index.html"));
 });
 
 app.post("/api/project", (req, res) => {
