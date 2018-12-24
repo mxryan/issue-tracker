@@ -6,10 +6,8 @@
 // - break out helper functions
 // - break out routes
 // - break out controllers
-// - read route
-// - need to associate issues with projets
-// - update front end to enable issues to be submitted and viewed for any project
-// - update front end to include new project submit
+// - add query support for get route
+// - CRA for front end
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");
@@ -159,7 +157,10 @@ app.delete("/api/issues/:projectname", (req, res) => {
 // I can GET /api/issues/{projectname} for an array of all issues on that specific project with all the information for each issue as was returned when posted.
 // I can filter my get request by also passing along any field and value in the query(ie. /api/issues/{project}?open=false). I can pass along as many fields/values as I want.
 app.get("/api/issues/:projectname", (req, res) => {
-  db.Project.findOne({projectName: req.params.projectname}).populate("issues").exec((findErr, foundProj) => {
+  db.Project.findOne({projectName: req.params.projectname}).populate({
+    path: "issues",
+    
+  }).exec((findErr, foundProj) => {
     if (findErr) {
       res.status(500).send({ error: findErr });
       return console.log({ error: findErr });
