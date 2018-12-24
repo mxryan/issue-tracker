@@ -2,6 +2,16 @@ const express = require("express");
 const db = require("../models");
 const router = express.Router();
 
+
+// helper function
+function isEmpty(obj) {
+  for(let key in obj) {
+      if(obj.hasOwnProperty(key))
+          return false;
+  }
+  return true;
+}
+
 router.post("/api/issues/:projectname", (req, res) => {
   console.log("hit /api/issues with param name: " + req.params.projectname)
   // REFACTOR: validate the incoming form data then instantiate new issue object
