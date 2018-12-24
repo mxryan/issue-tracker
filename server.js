@@ -157,9 +157,14 @@ app.delete("/api/issues/:projectname", (req, res) => {
 // I can GET /api/issues/{projectname} for an array of all issues on that specific project with all the information for each issue as was returned when posted.
 // I can filter my get request by also passing along any field and value in the query(ie. /api/issues/{project}?open=false). I can pass along as many fields/values as I want.
 app.get("/api/issues/:projectname", (req, res) => {
+  
+  const queryObj = {match: {}};
+  for (let key in req.query) {
+    queryObj.match[key] = req.query[key];
+  }
   db.Project.findOne({projectName: req.params.projectname}).populate({
     path: "issues",
-    
+    ...queryObj
   }).exec((findErr, foundProj) => {
     if (findErr) {
       res.status(500).send({ error: findErr });
