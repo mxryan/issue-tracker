@@ -3,6 +3,7 @@ const db = require("../models");
 const router = express.Router();
 
 router.post("/api/project", (req, res) => {
+  console.log("Request body ---->>>>>>>>", req.body);
   db.Project.findOne({ projectName: req.body.projectName }, (findErr, foundProj) => {
     if (findErr) {
       res.status(500).send({ error: findErr });
