@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import NewProjectForm from "./components/NewProjectForm";
+import NewIssueForm from "./components/NewIssueForm";
 class App extends Component {
   render() {
     const container = {
@@ -25,7 +26,9 @@ class App extends Component {
             <div style={flexItem}>
               <NewProjectForm />
             </div>
-            <div style={flexItem}>new issue</div>
+            <div style={flexItem}>
+              <NewIssueForm />
+            </div>
           </div>
           <div style={flexContainer}>
             <div style={flexItem}>new project</div>

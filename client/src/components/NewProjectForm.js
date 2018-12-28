@@ -13,12 +13,9 @@ class NewProjectForm extends React.Component {
     console.log(this.state);
   }
   submitState = () => {
-    console.log("submitState called");
     let outData = {
       projectName: this.state.projectName
     }
-    console.log(outData);
-    console.log(JSON.stringify(outData));
     fetch("/api/project", {
       method: "POST",
       headers: {
