@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import NewProjectForm from "./components/NewProjectForm";
 import NewIssueForm from "./components/NewIssueForm";
+import UpdateIssueForm from './components/UpdateIssueForm';
 class App extends Component {
   render() {
     const container = {
@@ -31,7 +32,7 @@ class App extends Component {
             </div>
           </div>
           <div style={flexContainer}>
-            <div style={flexItem}>new project</div>
+            <div style={flexItem}><UpdateIssueForm /></div>
             <div style={flexItem}>new issue</div>
             
           </div>
