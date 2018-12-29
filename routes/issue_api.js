@@ -57,10 +57,12 @@ router.put("/api/issues/:projectname", (req, res) => {
   // check that there are update fields
   const updateObj = {};
   for (let key in req.body) {
-    if (key != "_id" && req.body[key]) {
+    if (key != "_id" && req.body[key] !== "") {
       updateObj[key] = req.body[key];
     }
   }
+  console.log("req.body ---> ", req.body);
+  console.log("updateObj --> ", updateObj);
   if (isEmpty(updateObj)) {
     res.status(404).send({message: "At least one field in addition to _id must be filled in"});
   } else {
