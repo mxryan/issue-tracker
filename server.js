@@ -3,10 +3,11 @@
 // note: review helmet js lessons
 // note: 'prevent xss' requirement may be more involved then using the basic middleware. need to read the helmet js lessons
 // todo:
-// - change param from projectname to projectName
-// - implement delete front end form
-// - implement front end for getting issues
-// - switch check box to be called "close" but still send appropriate boolean value for "open" in the PUT route front end form
+// change landing page to a form for making new projects and a list of extant projects
+// implement a specific project page
+// MAIN
+// - make it so landing page is just a form for creating projects and a list of all projects with # of open issues
+// - then clicking on a project takes you to that projects page where crud operations can be performed for issues
 const path = require("path");
 const express = require("express");
 const helmet = require("helmet");

@@ -13,7 +13,8 @@ class App extends Component {
     }
     const flexItem = {
       width: "380px",
-      border: "5px solid black"
+      border: "1px solid black",
+      padding: "20px"
     }
     return (
       <div className="App">

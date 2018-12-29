@@ -41,10 +41,12 @@ class UpdateIssueForm extends React.Component {
   }
 
   render() {
+    
     const inputs = Object.keys(this.state).map((key, index) => {
       if (key === "open") {
         return (
           <div>
+            <span>Issue Is Open: </span>
             <input
               type="checkbox"
               name="close"
@@ -56,7 +58,7 @@ class UpdateIssueForm extends React.Component {
       } else {
         return (
           <div>
-            <p>{key}</p>
+            <span>{key}&nbsp; &nbsp;</span>
             <input
               type="text"
               value={this.state[key]}

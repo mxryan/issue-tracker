@@ -53,7 +53,7 @@ router.post("/api/issues/:projectname", (req, res) => {
   });
 });
 
-router.put("/api/issues/:projectname", (req, res) => {
+router.put("/api/issues/:projectname?", (req, res) => {
   // check that there are update fields
   const updateObj = {};
   for (let key in req.body) {
