@@ -3,7 +3,6 @@ const db = require("../models");
 const router = express.Router();
 
 router.post("/api/project", (req, res) => {
-  console.log("Request body ---->>>>>>>>", req.body);
   db.Project.findOne({ projectName: req.body.projectName }, (findErr, foundProj) => {
     if (findErr) {
       res.status(500).send({ error: findErr });
@@ -25,4 +24,18 @@ router.post("/api/project", (req, res) => {
     }
   })
 });
+
+router.get("/api/projects", (req, res) => {
+  db.Project.find({},(findErr, projects) => {
+    if (findErr) {
+      res.status(500).send({ error: findErr });
+      return console.log(findErr);
+    }
+    if (projects) {
+      res.status(201).send({ data: projects })
+    } else {
+      res.status(404).send({ message: "No projects found" });
+    }
+  })
+})
 module.exports = router;
