@@ -9,6 +9,12 @@ class IssuePage extends React.Component {
   grabIssues = (project) => {
     // grabs issues for a particular project
     // route is /api/issues/projectName
+    fetch("/api/issues/project")
+    .then(res => res.json())
+    .then(json => {
+      console.log(json);
+    })
+    .catch(err => console.log(err));
   }
   render(){
     return (

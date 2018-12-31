@@ -24,7 +24,10 @@ class NewProjectForm extends React.Component {
       body: JSON.stringify(outData)
     })
     .then(res => res.json())
-    .then(d => console.log(d))
+    .then(d => {
+      console.log(d);
+      window.location.reload();
+    })
     .catch(e => console.log(e));
   }
 
