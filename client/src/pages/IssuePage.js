@@ -23,7 +23,7 @@ class IssuePage extends React.Component {
     // read the project name from props
     // grabIssues for that project
     console.log("projectName: ",this.props.projectName)
-    this.grabIssues("test_project");
+    this.grabIssues(this.props.projectName);
   }
 
   render(){

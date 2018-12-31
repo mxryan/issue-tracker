@@ -27,6 +27,7 @@ class App extends Component {
     });
   }
   render() {
+    console.log(this.state);
     
     const container = {
       width: "90%",
@@ -44,7 +45,7 @@ class App extends Component {
 
     const currentPage = this.state.page === "projects"
       ? <ProjectPage setProject={this.setProject}/>
-      : <IssuePage setPage={this.setPage} projectName={this.props.selectedProject}/>;
+      : <IssuePage setPage={this.setPage} projectName={this.state.selectedProject}/>;
 
     return (
       <div className="App">
