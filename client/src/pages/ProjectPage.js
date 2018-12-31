@@ -30,7 +30,11 @@ class ProjectPage extends React.Component {
   render() {
     const projects = this.state.projectList ? this.state.projectList.map((probObj, i) => {
       return (
-        <li key={i}>{probObj.projectName}</li>
+        <li key={i}>
+          <button onClick={()=>this.props.setProject(probObj.projectName)}>
+            {probObj.projectName}
+          </button>
+        </li>
       )
     }) : <li>Currently there are no projects.</li>
     return (

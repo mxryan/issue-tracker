@@ -4,15 +4,28 @@ import ProjectPage from "./pages/ProjectPage";
 import NewProjectForm from "./components/NewProjectForm";
 import NewIssueForm from "./components/NewIssueForm";
 import UpdateIssueForm from './components/UpdateIssueForm';
+
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: "projects"
+      page: "projects",
+      selectedProject: null
     }
   }
 
-  
+  // setPage = (pageName) => {
+  //   this.setState({
+  //     page: pageName
+  //   });
+  // }
+
+  setProject = (projectName) => {
+    this.setState({
+      selectedProject: projectName,
+      page: "issues"
+    });
+  }
   render() {
     
     const container = {
@@ -29,7 +42,10 @@ class App extends Component {
       padding: "20px"
     }
 
-    const currentPage = this.state.page === "projects" ? <ProjectPage /> : <IssuePage />;
+    const currentPage = this.state.page === "projects"
+      ? <ProjectPage setProject={this.setProject}/>
+      : <IssuePage setPage={this.setPage} projectName={this.props.selectedProject}/>;
+
     return (
       <div className="App">
         <header>
