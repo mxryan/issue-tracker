@@ -64,6 +64,7 @@ class IssuePage extends React.Component {
         <div id="issue-container">
           {issues}
         </div>
+        <button onClick={this.props.goToProjectList}>Go back to project page</button>
       </div>
     )
   }

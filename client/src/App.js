@@ -26,6 +26,13 @@ class App extends Component {
       page: "issues"
     });
   }
+
+  goToProjectList = () => {
+    this.setState({
+      selectedProject: null,
+      page: "projects"
+    });
+  }
   render() {
     console.log(this.state);
     
@@ -45,7 +52,7 @@ class App extends Component {
 
     const currentPage = this.state.page === "projects"
       ? <ProjectPage setProject={this.setProject}/>
-      : <IssuePage setPage={this.setPage} projectName={this.state.selectedProject}/>;
+      : <IssuePage goToProjectList={this.goToProjectList} projectName={this.state.selectedProject}/>;
 
     return (
       <div className="App">
