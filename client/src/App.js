@@ -25,23 +25,19 @@ class App extends Component {
     });
   }
   render() {
-    console.log(this.state);
-    
     const container = {
       width: "90%",
       margin: "auto"
     }
    
-
     const currentPage = this.state.page === "projects"
       ? <ProjectPage setProject={this.setProject}/>
       : <IssuePage goToProjectList={this.goToProjectList} projectName={this.state.selectedProject}/>;
 
     return (
       <div className="App">
-        
         <div style={container}>
-          <h1>New</h1>
+          <h1>Issue Tracker</h1>
           {currentPage}
         </div>
       </div>
