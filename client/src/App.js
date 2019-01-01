@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import IssuePage from "./pages/IssuePage";
 import ProjectPage from "./pages/ProjectPage";
 
+// to do:
+// -figure out way to trigger a rerender after updating state with fresh data from new API call
+
 class App extends Component {
   constructor(props) {
     super(props);

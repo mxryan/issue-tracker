@@ -4,7 +4,6 @@ class UpdateIssueForm extends React.Component {
     super(props);
     this.state = {
       projectName: "",
-      _id: "",
       issueTitle: "",
       issueText: "",
       createdBy: "",
@@ -33,7 +32,7 @@ class UpdateIssueForm extends React.Component {
       headers: {
         "Content-Type": "application/json; charset=utf-8"
       },
-      body: JSON.stringify(this.state)
+      body: JSON.stringify({_id: this.props.selectedIssueId, ...this.state})
     })
       .then(res => res.json())
       .then(d => console.log(d))
@@ -41,6 +40,7 @@ class UpdateIssueForm extends React.Component {
   }
 
   render() {
+    console.log(this.state);
     
     const inputs = Object.keys(this.state).map((key, index) => {
       if (key === "open") {
@@ -55,7 +55,13 @@ class UpdateIssueForm extends React.Component {
             />
           </div>
         )
-      } else {
+      } else if (key==="_id"){
+        return (
+          <div>
+            <span>{key} : {this.props.selectedIssueId}</span>
+          </div>
+        )
+      }else {
         return (
           <div>
             <span>{key}&nbsp; &nbsp;</span>
@@ -72,7 +78,7 @@ class UpdateIssueForm extends React.Component {
     return (
       <div>
         <p>Update an Issue</p>
-
+        <p>Selected issue: {this.props.selectedIssueId}</p>
         {inputs}
         <button onClick={this.submitState}>Submit</button>
       </div>

@@ -1,25 +1,31 @@
 import React from "react";
 import NewIssueForm from "../components/NewIssueForm";
+import UpdateIssueForm from "../components/UpdateIssueForm";
 class IssuePage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       issueList : null,
+      selectedIssueId: null
     }
   }
   grabIssues = (project) => {
     fetch("/api/issues/" + project)
     .then(res => res.json())
     .then(json => {
-      console.log(json.data.issues);
       this.setState({
         issueList: json.data.issues
       });
     })
     .catch(err => console.log(err));
   }
+
+  targetIssueId = (issueId) => {
+    this.setState({
+      selectedIssueId: issueId
+    });
+  }
   componentDidMount() {
-    console.log("projectName: ",this.props.projectName)
     this.grabIssues(this.props.projectName);
   }
 
@@ -31,16 +37,14 @@ class IssuePage extends React.Component {
     }
     const flexStyleForLeftCol = {
       width: "30%",
-      
     }
     const flexStyleForRtCol = {
       width: "60%",
-      
     }
     const issues = this.state.issueList ? this.state.issueList.map((issueObj) => {
       return (
         <div key={issueObj._id}>
-
+          <button onClick={()=>{this.targetIssueId(issueObj._id)}}>Update This Issue</button>
           <div style={flexContainer}>
             <h5 style={flexStyleForLeftCol}>Issue Title</h5>
             <p style={flexStyleForRtCol}>{issueObj.issueTitle}</p>
@@ -70,21 +74,22 @@ class IssuePage extends React.Component {
             <h5 style={flexStyleForLeftCol}>Open</h5>
             <p style={flexStyleForRtCol}>{issueObj.open}</p>
           </div>
-
           
-
           <hr/>
-          
+
         </div>
       )
     }) : <div><p>No issues for this project</p></div>
+    
     return (
       <div>
         <h1>Issue Page</h1>
         <h3>Project: {this.props.projectName}</h3>
         <button onClick={this.props.goToProjectList}>Go back to project page</button>
-        <div id="new-issue-form">
+        
+        <div>
           <NewIssueForm />
+          <UpdateIssueForm selectedIssueId={this.state.selectedIssueId}/>
         </div>
         <div id="issue-container">
           {issues}
