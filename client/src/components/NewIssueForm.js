@@ -18,9 +18,6 @@ class NewIssueForm extends React.Component {
     console.log(this.state);
   }
   submitState = () => {
-    // let outData = {
-    //   projectName: this.state.projectName
-    // }
     fetch("/api/issues/" + this.state.projectName, {
       method: "POST",
       headers: {
