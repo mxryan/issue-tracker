@@ -1,4 +1,5 @@
 import React from "react";
+import NewIssueForm from "../components/NewIssueForm";
 class IssuePage extends React.Component {
   constructor(props) {
     super(props);
@@ -50,6 +51,26 @@ class IssuePage extends React.Component {
             <p style={flexStyleForRtCol}>{issueObj.issueText}</p>
           </div>
 
+          <div style={flexContainer}>
+            <h5 style={flexStyleForLeftCol}>createdBy</h5>
+            <p style={flexStyleForRtCol}>{issueObj.createdBy}</p>
+          </div>
+
+          <div style={flexContainer}>
+            <h5 style={flexStyleForLeftCol}>Assigned To</h5>
+            <p style={flexStyleForRtCol}>{issueObj.assignedTo}</p>
+          </div>
+
+          <div style={flexContainer}>
+            <h5 style={flexStyleForLeftCol}>Status Text</h5>
+            <p style={flexStyleForRtCol}>{issueObj.statusText}</p>
+          </div>
+
+          <div style={flexContainer}>
+            <h5 style={flexStyleForLeftCol}>Open</h5>
+            <p style={flexStyleForRtCol}>{issueObj.open}</p>
+          </div>
+
           
 
           <hr/>
@@ -61,10 +82,14 @@ class IssuePage extends React.Component {
       <div>
         <h1>Issue Page</h1>
         <h3>Project: {this.props.projectName}</h3>
+        <button onClick={this.props.goToProjectList}>Go back to project page</button>
+        <div id="new-issue-form">
+          <NewIssueForm />
+        </div>
         <div id="issue-container">
           {issues}
         </div>
-        <button onClick={this.props.goToProjectList}>Go back to project page</button>
+        
       </div>
     )
   }
