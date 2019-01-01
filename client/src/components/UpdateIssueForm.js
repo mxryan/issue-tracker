@@ -24,9 +24,6 @@ class UpdateIssueForm extends React.Component {
     });
   } 
   submitState = () => {
-    // let outData = {
-    //   projectName: this.state.projectName
-    // }
     fetch("/api/issues/" + this.state.projectName, {
       method: "PUT",
       headers: {
@@ -40,8 +37,6 @@ class UpdateIssueForm extends React.Component {
   }
 
   render() {
-    console.log(this.state);
-    
     const inputs = Object.keys(this.state).map((key, index) => {
       if (key === "open") {
         return (
@@ -77,7 +72,7 @@ class UpdateIssueForm extends React.Component {
     });
     return (
       <div>
-        <p>Update an Issue</p>
+        <h4 name="update" id="update">Update an Issue</h4>
         <p>Selected issue: {this.props.selectedIssueId}</p>
         {inputs}
         <button onClick={this.submitState}>Submit</button>

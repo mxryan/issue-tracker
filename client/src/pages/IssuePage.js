@@ -24,6 +24,7 @@ class IssuePage extends React.Component {
     this.setState({
       selectedIssueId: issueId
     });
+    
   }
   componentDidMount() {
     this.grabIssues(this.props.projectName);
@@ -40,6 +41,10 @@ class IssuePage extends React.Component {
     }
     const flexStyleForRtCol = {
       width: "60%",
+    }
+    const issueBoxStyle = {
+      height: "700px",
+      overflow: "scroll"
     }
     const issues = this.state.issueList ? this.state.issueList.map((issueObj) => {
       return (
@@ -87,13 +92,15 @@ class IssuePage extends React.Component {
         <h3>Project: {this.props.projectName}</h3>
         <button onClick={this.props.goToProjectList}>Go back to project page</button>
         
-        <div>
-          <NewIssueForm projectName={this.props.projectName}/>
-          <UpdateIssueForm selectedIssueId={this.state.selectedIssueId}/>
-        </div>
-        <div id="issue-container">
-          {issues}
-        </div>
+       <div style={flexContainer}>
+          <div style={flexStyleForLeftCol}>
+            <NewIssueForm projectName={this.props.projectName}/>
+            <UpdateIssueForm selectedIssueId={this.state.selectedIssueId}/>
+          </div>
+          <div id="issue-container" style={{...flexStyleForRtCol, ...issueBoxStyle}}>
+            {issues}
+          </div>
+       </div>
         
       </div>
     )
