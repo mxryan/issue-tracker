@@ -3,7 +3,6 @@ class NewIssueForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      projectName:"",
       issueTitle: "",
       issueText: "",
       createdBy: "",
@@ -18,7 +17,7 @@ class NewIssueForm extends React.Component {
     console.log(this.state);
   }
   submitState = () => {
-    fetch("/api/issues/" + this.state.projectName, {
+    fetch("/api/issues/" + this.props.projectName, {
       method: "POST",
       headers: {
         "Content-Type": "application/json; charset=utf-8"
@@ -47,7 +46,8 @@ class NewIssueForm extends React.Component {
    });
     return (
       <div>
-        <p>New Project</p>
+        <h3>New Issue </h3>
+        <h6>Project: {this.props.projectName}</h6>
         
         {inputs}
         <button onClick={this.submitState}>Submit</button>

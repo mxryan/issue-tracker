@@ -88,7 +88,7 @@ class IssuePage extends React.Component {
         <button onClick={this.props.goToProjectList}>Go back to project page</button>
         
         <div>
-          <NewIssueForm />
+          <NewIssueForm projectName={this.props.projectName}/>
           <UpdateIssueForm selectedIssueId={this.state.selectedIssueId}/>
         </div>
         <div id="issue-container">
