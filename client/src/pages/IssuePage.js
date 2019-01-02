@@ -24,8 +24,28 @@ class IssuePage extends React.Component {
     this.setState({
       selectedIssueId: issueId
     });
-    
   }
+
+  deleteIssue = (issueId) => {
+    fetch("/api/issues/" + this.props.projectName, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({_id: issueId})
+    }).then(res => res.json())
+    .then(json => {
+      console.log("Deleted", json);
+      let i = this.state.issueList.findIndex(x => x._id === issueId);
+      this.setState({
+        issueList: [
+          ...this.state.issueList.slice(0, i),
+          ...this.state.issueList.slice(i + 1)
+        ]
+      });
+    })
+  }
+
   componentDidMount() {
     this.grabIssues(this.props.projectName);
   }
@@ -49,7 +69,7 @@ class IssuePage extends React.Component {
     const issues = this.state.issueList ? this.state.issueList.map((issueObj) => {
       return (
         <div key={issueObj._id}>
-          <button onClick={()=>{this.targetIssueId(issueObj._id)}}>Update This Issue</button>
+          
           <div style={flexContainer}>
             <h5 style={flexStyleForLeftCol}>Issue Title</h5>
             <p style={flexStyleForRtCol}>{issueObj.issueTitle}</p>
@@ -79,6 +99,9 @@ class IssuePage extends React.Component {
             <h5 style={flexStyleForLeftCol}>Open</h5>
             <p style={flexStyleForRtCol}>{issueObj.open}</p>
           </div>
+
+          <button onClick={() => this.targetIssueId(issueObj._id)}>Update This Issue</button>
+          <button onClick={() => this.deleteIssue(issueObj._id)}>Delete This Issue</button>
           
           <hr/>
 
